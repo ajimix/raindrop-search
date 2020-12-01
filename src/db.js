@@ -1,6 +1,6 @@
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
-const debug = true;
+const debug = false;
 
 let client;
 

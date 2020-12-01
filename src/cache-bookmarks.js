@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
 const db = require('./db.js');
 const links = [];
-let currentPage = 0;
+let parallel = 5;
+let processFinished = false;
 
 function sqlEscape(str) {
   if (undefined === str) {
@@ -47,41 +48,52 @@ function fetchRaindrop(endpoint, options) {
   );
 }
 
-function fetchPages() {
-  console.log(`Fetching Raindrop links page ${currentPage}`);
-  return fetchRaindrop(`/raindrops/0?perpage=50&page=${currentPage}`).then(async (res) => {
+function fetchPage(page) {
+  console.log(`Fetching Raindrop links page ${page}`);
+  return fetchRaindrop(`/raindrops/0?perpage=50&page=${page}`).then(async (res) => {
     if (res.status !== 200) {
       throw Error(`Invalid Raindrop response ${res.status}`);
-    }
-    if (db.client === undefined) {
-      console.log('Database is not ready, waiting.');
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-    }
-
-    if (currentPage === 0) {
-      await db.client.db.exec('DROP TABLE IF EXISTS bookmarks_cache');
-      await db.client.db.exec(`CREATE TABLE bookmarks_cache (
-        id unsigned int NOT NULL,
-        link text,
-        title text,
-        tags text,
-        PRIMARY KEY (id)
-      );`);
     }
 
     const json = await res.json();
     if (json.items.length === 0) {
-      return Promise.resolve(links);
+      processFinished = true;
+      return Promise.resolve();
     }
     links.push.apply(links, json.items);
-    currentPage++;
-    return fetchPages();
+    return Promise.resolve();
   });
 }
 
-function start() {
+async function fetchPages() {
+  while (db.client === undefined) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  await db.client.run('DROP TABLE IF EXISTS bookmarks_cache');
+  await db.client.run(`CREATE TABLE bookmarks_cache (
+    id unsigned int NOT NULL,
+    link text,
+    title text,
+    tags text,
+    PRIMARY KEY (id)
+  );`);
+
+  let page = 0;
+  do {
+    const promises = [];
+    for (let i = 0; i < parallel; i++) {
+      promises.push(fetchPage(page));
+      page++;
+    }
+    await Promise.all(promises);
+  } while (!processFinished);
+  return Promise.resolve();
+}
+
+function start(options = {}) {
+  parallel = options.parallel;
   return fetchPages()
-    .then(async (links) => {
+    .then(async () => {
       if (links.length === 0) {
         return Promise.resolve();
       }
@@ -99,6 +111,7 @@ function start() {
       if (results.changes !== links.length) {
         throw Error('Something wrong happened when caching links');
       }
+      console.log(`The cache now contains ${results.changes} links`);
       return Promise.resolve();
     })
     .catch((err) => {

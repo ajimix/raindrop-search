@@ -8,7 +8,11 @@ async function searchBookmarks(searchTerm) {
   return db.client
     .all('SELECT * FROM bookmarks_cache WHERE title LIKE ? OR tags LIKE ?', `%${searchTerm}%`, `%${searchTerm}%`)
     .catch((err) => {
-      console.error(err);
+      if (err.code === 'SQLITE_ERROR' && err.message.indexOf('no such table: bookmarks_cache') > -1) {
+        throw new Error('Looks like you haven executed rds rdscache');
+      } else {
+        throw err;
+      }
     });
 }
 
