@@ -1,5 +1,5 @@
 {
-  "name": "rd",
+  "name": "rds",
   "version": "1.0.0",
   "description": "",
   "main": "app.js",
@@ -21,6 +21,6 @@
     "prettier": "^2.2.1"
   },
   "bin": {
-    "rd": "./app.js"
+    "rds": "./app.js"
   }
 }

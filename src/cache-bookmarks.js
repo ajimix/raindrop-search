@@ -75,8 +75,7 @@ function fetchPages() {
     }
     links.push.apply(links, json.items);
     currentPage++;
-    return Promise.resolve(links);
-    // return fetchPages();
+    return fetchPages();
   });
 }
 

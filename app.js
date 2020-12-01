@@ -20,7 +20,7 @@ if (searchTerm === undefined) {
   process.exit(1);
 }
 
-if (searchTerm === 'rdcache') {
+if (searchTerm === 'rdscache') {
   cacheBookmarks().then(() => {
     console.log('Cache successful');
     process.exit(0);
@@ -50,15 +50,14 @@ if (searchTerm === 'rdcache') {
       number++;
     });
 
-    resultsPrompt += 'Which one do you want to load? Or type q to exit.\n';
+    resultsPrompt += `${colors.inverse('Type number (q to exit)')} `;
 
     rl.question(resultsPrompt, (option) => {
-      // console.log(option);
       if (option === 'q') {
         process.exit(0);
       }
       option = option * 1;
-      if (isNaN(option) || option > MAX_RESULTS || option < 1) {
+      if (isNaN(option) || option > results.length || option < 1) {
         console.log('Invalid option');
         process.exit(0);
       }
