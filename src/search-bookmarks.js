@@ -3,7 +3,7 @@ const colors = require('colors');
 const readline = require('readline');
 const db = require('./db.js');
 
-const MAX_RESULTS = 8; // How many results to display.
+let config;
 
 function promptSpacing(number) {
   return new Array((number + '').length + 2).join(' ');
@@ -16,11 +16,8 @@ function cropText(text, length) {
   return text.substring(0, length) + '...';
 }
 
-async function searchBookmarks(searchTerm) {
-  // Wait for db connection to be done.
-  while (db.client === undefined) {
-    await new Promise((resolve) => setTimeout(resolve, 10));
-  }
+function searchBookmarks(searchTerm) {
+  config = require('../config.json');
   return db.client
     .all('SELECT * FROM bookmarks_cache WHERE title LIKE ? OR tags LIKE ?', `%${searchTerm}%`, `%${searchTerm}%`)
     .catch((err) => {
@@ -41,12 +38,13 @@ function presentResults(results, searchTerm) {
     input: process.stdin,
     output: process.stdout,
   });
-  let resultsPrompt = 'Found the following results:\n';
+  let resultsPrompt = 'Found the following results:\n\n';
   let number = 1;
+  let truncatedResults = false;
 
-  if (results.length > MAX_RESULTS) {
-    console.log(`More than ${MAX_RESULTS} results found, showing first 5`);
-    results.splice(MAX_RESULTS, 99999);
+  if (results.length > config.maxResults) {
+    truncatedResults = true;
+    results.splice(config.maxResults, 99999);
   }
 
   // Build the output.
@@ -62,6 +60,10 @@ function presentResults(results, searchTerm) {
     resultsPrompt += '\n';
     number++;
   });
+
+  if (truncatedResults) {
+    resultsPrompt += `More than ${config.maxResults} results found, showing the first ${config.maxResults}\n\n`;
+  }
 
   resultsPrompt += `${colors.inverse('Type number (q to exit)')} `;
 

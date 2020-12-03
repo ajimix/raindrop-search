@@ -5,12 +5,23 @@ const debug = false;
 
 let client;
 
+/**
+ * The database loads on file load, so we just wait for client to have some value.
+ * @returns {Promise<dbClient>}
+ */
+async function loadDb() {
+  while (client === undefined) {
+    await new Promise((resolve) => setTimeout(resolve, 10));
+  }
+  return Promise.resolve(client);
+}
+
 if (debug) {
   sqlite3.verbose();
 }
 
 open({
-  filename: path.resolve(__filename, '../../database.db'),
+  filename: path.resolve(__dirname, '../database.db'),
   driver: sqlite3.cached.Database,
 })
   .then((db) => {
@@ -31,4 +42,5 @@ module.exports = {
   get client() {
     return client;
   },
+  loadDb,
 };
