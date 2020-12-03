@@ -1,3 +1,4 @@
+const path = require('path');
 const sqlite3 = require('sqlite3');
 const { open } = require('sqlite');
 const debug = false;
@@ -9,7 +10,7 @@ if (debug) {
 }
 
 open({
-  filename: './database.db',
+  filename: path.resolve(__filename, '../../database.db'),
   driver: sqlite3.cached.Database,
 })
   .then((db) => {
