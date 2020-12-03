@@ -19,7 +19,11 @@ function cropText(text, length) {
 function searchBookmarks(searchTerm) {
   config = require('../config.json');
   return db.client
-    .all('SELECT * FROM bookmarks_cache WHERE title LIKE ? OR tags LIKE ?', `%${searchTerm}%`, `%${searchTerm}%`)
+    .all(
+      'SELECT * FROM bookmarks_cache WHERE title LIKE ? OR tags LIKE ? ORDER BY ID DESC',
+      `%${searchTerm}%`,
+      `%${searchTerm}%`
+    )
     .catch((err) => {
       if (err.code === 'SQLITE_ERROR' && err.message.indexOf('no such table: bookmarks_cache') > -1) {
         throw new Error('Looks like you haven executed rds rdscache');
@@ -30,7 +34,6 @@ function searchBookmarks(searchTerm) {
 }
 
 function presentResults(results, searchTerm) {
-  // console.log(results);
   if (results.length === 0) {
     return console.log(`No results found for search "${searchTerm}"`);
   }
@@ -82,7 +85,42 @@ function presentResults(results, searchTerm) {
   });
 }
 
+function presentAlfredResults(results) {
+  results.splice(config.maxResults, 99999);
+
+  const items = results.map((link) => {
+    const url = link.link;
+    return {
+      uid: link.id,
+      title: link.title,
+      subtitle: url,
+      arg: url,
+      quicklookurl: url,
+      text: {
+        copy: url,
+        largetype: link.title,
+      },
+    };
+  });
+
+  if (items.length === 0) {
+    return console.log(
+      JSON.stringify({
+        items: [
+          {
+            title: 'No results found',
+            subtitle: 'Please type something else',
+          },
+        ],
+      })
+    );
+  }
+
+  return console.log(JSON.stringify({ items }));
+}
+
 module.exports = {
   searchBookmarks,
   presentResults,
+  presentAlfredResults,
 };

@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 const { loadDb } = require('./src/db.js');
 const colors = require('colors');
-const { searchBookmarks, presentResults } = require('./src/search-bookmarks.js');
+const { searchBookmarks, presentResults, presentAlfredResults } = require('./src/search-bookmarks.js');
 const cacheBookmarks = require('./src/cache-bookmarks.js');
 const configure = require('./src/configure.js');
 
@@ -37,6 +37,17 @@ loadDb()
       });
     }
 
-    return searchBookmarks(searchTerm).then((results) => presentResults(results, searchTerm));
+    let isAlfred = false;
+    if (searchTerm.indexOf('--alfred') === 0) {
+      isAlfred = true;
+      searchTerm = searchTerm.replace('--alfred', '').trim();
+    }
+
+    return searchBookmarks(searchTerm).then((results) => {
+      if (isAlfred) {
+        return presentAlfredResults(results);
+      }
+      return presentResults(results, searchTerm);
+    });
   })
   .catch(console.error);
