@@ -9,6 +9,13 @@ function promptSpacing(number) {
   return new Array((number + '').length + 2).join(' ');
 }
 
+function cropText(text, length) {
+  if (text.length < length) {
+    return text;
+  }
+  return text.substring(0, length) + '...';
+}
+
 async function searchBookmarks(searchTerm) {
   // Wait for db connection to be done.
   while (db.client === undefined) {
@@ -44,8 +51,11 @@ function presentResults(results, searchTerm) {
 
   // Build the output.
   results.forEach((link) => {
-    resultsPrompt += `${colors.cyan(number)}. ${colors.green(link.title.substring(0, 30))}\n`;
-    resultsPrompt += `${promptSpacing(number)} ${colors.red('>')} ${colors.yellow(link.link.substring(0, 30))}\n`;
+    // Link title
+    resultsPrompt += `${colors.cyan(number)}. ${colors.green(cropText(link.title, 80))}\n`;
+    // Link url
+    resultsPrompt += `${promptSpacing(number)} ${colors.red('>')} ${colors.yellow(cropText(link.link, 80))}\n`;
+    // Link tags
     if (link.tags.length > 0) {
       resultsPrompt += `${promptSpacing(number)} ${colors.red('#')} ${colors.blue(link.tags)}\n`;
     }
