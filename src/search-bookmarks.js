@@ -26,7 +26,10 @@ function searchBookmarks(searchTerm) {
     )
     .catch((err) => {
       if (err.code === 'SQLITE_ERROR' && err.message.indexOf('no such table: bookmarks_cache') > -1) {
-        throw new Error('Looks like you haven executed rds rdscache');
+        const err = new Error("Looks like you haven't executed rds --cache");
+        err.title = 'Cache required';
+        err.subtitle = 'Run the following on the terminal: rds --cache';
+        throw err;
       } else {
         throw err;
       }

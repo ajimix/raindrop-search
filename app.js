@@ -10,6 +10,7 @@ const configure = require('./src/configure.js');
 
 const args = process.argv.slice(2);
 let searchTerm = args.join(' ').trim();
+let isAlfred = false;
 
 if (searchTerm === '') {
   console.error('Please specify a search term or --cache or --configure');
@@ -25,9 +26,16 @@ loadDb()
       });
     }
 
+    if (searchTerm.indexOf('--alfred') === 0) {
+      isAlfred = true;
+      searchTerm = searchTerm.replace('--alfred', '').trim();
+    }
+
     if (!fs.existsSync(path.resolve(__dirname, 'config.json'))) {
-      console.log('Please configure first with rds --configure');
-      process.exit(1);
+      const err = new Error('Please configure first with rds --configure');
+      err.title = 'Configuration required';
+      err.subtitle = 'Run the following on the terminal: rds --configure';
+      throw err;
     }
 
     if (searchTerm === '--cache') {
@@ -37,12 +45,6 @@ loadDb()
       });
     }
 
-    let isAlfred = false;
-    if (searchTerm.indexOf('--alfred') === 0) {
-      isAlfred = true;
-      searchTerm = searchTerm.replace('--alfred', '').trim();
-    }
-
     return searchBookmarks(searchTerm).then((results) => {
       if (isAlfred) {
         return presentAlfredResults(results);
@@ -50,4 +52,11 @@ loadDb()
       return presentResults(results, searchTerm);
     });
   })
-  .catch(console.error);
+  .catch((err) => {
+    if (isAlfred) {
+      console.log(JSON.stringify({ items: [{ title: err.title, subtitle: err.subtitle }] }));
+    } else {
+      console.error(err.message);
+    }
+    process.exit(1);
+  });
