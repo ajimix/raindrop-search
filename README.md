@@ -1,6 +1,6 @@
 # rds Raindrop Search Client
 
-I find Raindrop search very slow and I'm constantly using the bookmarks to access websites that I constantly use. So I built this super fast search for the console and Alfred.
+I find Raindrop search very slow and I'm constantly using the bookmarks to access websites that I constantly use. So I built this super fast search for the terminal and Alfred.
 
 The app has been tested with 100k bookmarks and it's super fast!
 
@@ -23,7 +23,7 @@ rds --configure
 
 Finally cache the bookmarks with `rds --cache`.
 
-For Alfred usage, read below.
+For Alfred usage, [read below](#alfred).
 
 Note that the cache is not autoupdated. So everytime you want to have your newest copy of your bookmarks, you need to execute the cache again. As bookmarks do not change so often, this shouldn't be a big problem.
 
