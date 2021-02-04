@@ -11,13 +11,13 @@
   "dependencies": {
     "colors": "^1.4.0",
     "node-fetch": "^2.6.1",
-    "open": "^7.3.0",
-    "sqlite": "^4.0.17",
-    "sqlite3": "^5.0.0"
+    "open": "^7.4.0",
+    "sqlite": "^4.0.19",
+    "sqlite3": "^5.0.1"
   },
   "devDependencies": {
-    "eslint": "^7.14.0",
-    "eslint-config-prettier": "^6.15.0",
+    "eslint": "^7.19.0",
+    "eslint-config-prettier": "^7.2.0",
     "prettier": "^2.2.1"
   },
   "bin": {
