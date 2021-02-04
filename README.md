@@ -1,27 +1,28 @@
 # rds Raindrop Search Client
 
-I find Raindrop search very slow and I'm constantly using the bookmarks to access websites that I constantly use. So I built this super fast search for the terminal and Alfred.
+**Super fast Raindrop.ai search for the impatient.**
 
-The app has been tested with 100k bookmarks and it's super fast!
+I find Raindrop search very slow and I'm constantly using the bookmarks to access websites that I constantly use. So I built this super fast search for the terminal and [Alfred](https://www.alfredapp.com). Note that to achieve the fast speed, it uses a local cache.
+
+The app has been tested (on Mac/Linux systems) with 100k bookmarks and it's super fast!
+
+**Terminal preview**
+
+![Terminal example](assets/terminal.jpg)
+
+**Alfred preview**
+
+![Alfred example](assets/alfred.jpg)
 
 ## Setup
 
-```bash
-npm i -g raindrop-search
-```
-
+- Run the following in the terminal: `npm i -g raindrop-search`
 - Go to Raindrop `Settings` > `Integrations` > `For Developers` > `Create new app`.
 - Create new application, use any name.
 - Click on the app you just created.
 - Click on `Create test token` and copy the token.
-
-Run the following on your command line and follow the steps:
-
-```bash
-rds --configure
-```
-
-Finally cache the bookmarks with `rds --cache`.
+- Run the following on the terminal: `rds --configure`
+- Finally cache the bookmarks with `rds --cache`.
 
 For Alfred usage, [read below](#alfred).
 
@@ -33,10 +34,10 @@ Just type `rds whatever` and then type the number you want to open.
 
 Examples:
 
-- rds github
-- rds admin website
-- rds facebook
-- rds gaming newsletter
+- `rds github`
+- `rds admin website`
+- `rds facebook`
+- `rds gaming newsletter`
 
 ## Alfred
 
