@@ -8,11 +8,11 @@ The app has been tested (on Mac/Linux systems) with 100k bookmarks and it's supe
 
 **Terminal preview**
 
-![Terminal example](assets/terminal.jpg)
+![Terminal example](https://raw.githubusercontent.com/ajimix/raindrop-search/HEAD/assets/terminal.jpg)
 
 **Alfred preview**
 
-![Alfred example](assets/alfred.jpg)
+![Alfred example](https://raw.githubusercontent.com/ajimix/raindrop-search/HEAD/assets/alfred.jpg)
 
 ## Setup
 
