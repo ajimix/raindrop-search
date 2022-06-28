@@ -22,6 +22,10 @@
     "bookmarks",
     "alfred"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ajimix/raindrop-search.git"
+  },
   "devDependencies": {
     "eslint": "^8.18.0",
     "eslint-config-prettier": "^8.5.0",
