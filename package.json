@@ -10,10 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
-    "node-fetch": "^2.6.1",
-    "open": "^7.4.0",
-    "sqlite": "^4.0.19",
-    "sqlite3": "^5.0.1"
+    "node-fetch": "^3.2.6",
+    "open": "^8.4.0",
+    "sqlite": "^4.1.1",
+    "sqlite3": "^5.0.8"
   },
   "keywords": [
     "raindrop",
@@ -23,9 +23,9 @@
     "alfred"
   ],
   "devDependencies": {
-    "eslint": "^7.19.0",
-    "eslint-config-prettier": "^7.2.0",
-    "prettier": "^2.2.1"
+    "eslint": "^8.18.0",
+    "eslint-config-prettier": "^8.5.0",
+    "prettier": "^2.7.1"
   },
   "bin": {
     "rds": "./app.js"
