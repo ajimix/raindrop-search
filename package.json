@@ -10,10 +10,10 @@
   "license": "ISC",
   "dependencies": {
     "colors": "^1.4.0",
-    "node-fetch": "^3.2.6",
+    "node-fetch": "^3.2.10",
     "open": "^8.4.0",
-    "sqlite": "^4.1.1",
-    "sqlite3": "^5.0.8"
+    "sqlite": "^4.1.2",
+    "sqlite3": "^5.1.2"
   },
   "keywords": [
     "raindrop",
@@ -27,7 +27,7 @@
     "url": "https://github.com/ajimix/raindrop-search.git"
   },
   "devDependencies": {
-    "eslint": "^8.18.0",
+    "eslint": "^8.27.0",
     "eslint-config-prettier": "^8.5.0",
     "prettier": "^2.7.1"
   },
